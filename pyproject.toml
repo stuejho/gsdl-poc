@@ -1,0 +1,19 @@
+[tool.poetry]
+name = "gsdl"
+version = "0.1.0"
+description = ""
+authors = ["Ethan Ho <ethan.j.ho-1@ou.edu>"]
+readme = "README.md"
+
+[tool.poetry.dependencies]
+python = "^3.11"
+
+[tool.poetry.group.dev.dependencies]
+black = "^24.1.1"
+pylint = "^3.0.3"
+
+[tool.black]
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
