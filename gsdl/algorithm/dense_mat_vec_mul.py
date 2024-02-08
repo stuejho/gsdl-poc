@@ -15,9 +15,9 @@ class DenseMatVecMul(IAlgorithm):
                 {{
                     for (int i = 0; i < {mat.num_rows}; i++)
                     {{
-                        for (int j = 0; j < {mat.num_cols}; j++
+                        for (int j = 0; j < {mat.num_cols}; j++)
                         {{
-                            {y}[j] += A[i * {mat.row_stride} + j * {mat.col_stride}] * {x}[i];
+                            {y}[j] += {mat.ptr_name}[i * {mat.row_stride} + j * {mat.col_stride}] * {x}[i];
                         }}
                     }}
                 }}
