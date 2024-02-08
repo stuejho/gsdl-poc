@@ -8,7 +8,6 @@ on:
 
 permissions:
   checks: write
-  pull-requests: write
 
 jobs:
   test:
@@ -31,8 +30,8 @@ jobs:
       - name: Run tests
         run: poetry run pytest --junitxml=pytest-junit.xml --cov-report=xml --cov-report=html
       - name: Publish Test Report
-        uses: EnricoMi/publish-unit-test-result-action@v2
-        if: always()
+        uses: mikepenz/action-junit-report@v4
+        if: success()
         with:
-          files: |
-            pytest-junit.xml
+          job_name: Test
+          report_paths: pytest-junit.xml
