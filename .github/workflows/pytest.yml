@@ -51,7 +51,8 @@ jobs:
         uses: mikepenz/action-junit-report@v4
         if: success()
         with:
-          job_name: Test
+          job_name: test
+          check_name: junit-test-report
           report_paths: pytest-junit.xml
 
       - name: Code Coverage Report
@@ -67,16 +68,18 @@ jobs:
           output: both
           thresholds: '60 80'
 
+      # Move coverage to artifact/${{ env.BRANCH_NAME }} so it is accessible
+      # at /gsdl/${{ env.BRANCH_NAME }}/coverage
       - name: Move coverage to directory for artifact upload
         run: |
-          mkdir ${{ env.BRANCH_NAME }}
-          mv htmlcov ${{ env.BRANCH_NAME }}/coverage
+          mkdir -p artifact/${{ env.BRANCH_NAME }}
+          mv htmlcov artifact/${{ env.BRANCH_NAME }}/coverage
       - name: Setup Pages
         uses: actions/configure-pages@v4
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v3
         with:
-          path: ${{ env.BRANCH_NAME }}
+          path: artifact
           retention-days: 3
       - name: Deploy to GitHub Pages
         id: deployment
