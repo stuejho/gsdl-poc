@@ -19,6 +19,9 @@ concurrency:
   group: "pages"
   cancel-in-progress: false
 
+env:
+  BRANCH_NAME: ${{ github.head_ref }}
+
 jobs:
   test:
     environment:
@@ -66,13 +69,14 @@ jobs:
 
       - name: Move coverage to directory for artifact upload
         run: |
-          mv htmlcov ${{ github.head_ref }}/coverage
+          mkdir ${{ env.BRANCH_NAME }}
+          mv htmlcov ${{ env.BRANCH_NAME }}/coverage
       - name: Setup Pages
         uses: actions/configure-pages@v4
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v3
         with:
-          path: ${{ github.head_ref }}
+          path: ${{ env.BRANCH_NAME }}
           retention-days: 3
       - name: Deploy to GitHub Pages
         id: deployment
