@@ -1,0 +1,4 @@
+name: gsdl
+dependencies:
+  - python=3.11
+  - poetry=1.4.0
