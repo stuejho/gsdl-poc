@@ -1,0 +1,6 @@
+name: gsdl
+channels:
+  - default
+dependencies:
+  - python=3.12
+  - conda-forge::poetry=1.7.1
