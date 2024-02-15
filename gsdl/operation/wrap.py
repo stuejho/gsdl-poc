@@ -1,0 +1,10 @@
+from gsdl.operation import AbstractOperation, IOperation
+
+
+class Wrap(AbstractOperation):
+    def __init__(self, operation: IOperation):
+        super().__init__([], [operation], is_base_case=True)
+
+    def single_op_str(self):
+        input_op = self._inputs[0]
+        return f"({input_op})"
