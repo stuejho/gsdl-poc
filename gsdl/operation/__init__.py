@@ -1,3 +1,4 @@
+from .i_implementation import IImplementation
 from .i_operation import IOperation
 from .abstract_operation import AbstractOperation
 

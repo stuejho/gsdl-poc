@@ -1,12 +1,13 @@
 from __future__ import annotations
 
+from abc import ABC
 from copy import deepcopy
 
 from gsdl.operation import IOperation
 from gsdl.parameter import IParam
 
 
-class AbstractOperation(IOperation):
+class AbstractOperation(IOperation, ABC):
     _params: list[IParam]
     _inputs: list[AbstractOperation]
     _is_terminal: bool
@@ -126,3 +127,6 @@ class AbstractOperation(IOperation):
         if self._parent_op:
             idx = self._parent_op_idx
             self._parent_op._inputs[idx] = expanded_op
+
+    def to_code(self) -> str:
+        raise Exception("This operation cannot be converted to code")

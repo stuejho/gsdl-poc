@@ -32,7 +32,7 @@ class Algorithm:
     def to_code(self) -> str:
         algo = self.to_algorithm()
 
-        return "TODO"
+        return algo.to_code()
 
     def __get_matching_rule(
         self, operation: IOperation, param_values: dict

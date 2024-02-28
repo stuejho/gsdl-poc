@@ -1,8 +1,7 @@
-from gsdl.common import IImplementation
 from gsdl.operation import AbstractOperation, IOperation
 
 
-class Wrap(AbstractOperation, IImplementation):
+class Wrap(AbstractOperation):
     def __init__(self, operation: IOperation):
         super().__init__([], [operation], is_base_case=True)
 

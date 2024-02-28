@@ -28,6 +28,9 @@ class MockTerminal(AbstractOperation):
     def __init__(self):
         super().__init__(is_terminal=True)
 
+    def to_code(self) -> str:
+        return "a"
+
 
 def test_constructor():
     op = MockNonTerminalA()
@@ -84,7 +87,26 @@ def test_to_algorithm(operation: IOperation, rule_set: RuleSet, expected: str):
 
 @pytest.mark.parametrize(
     "operation,rule_set,expected",
-    [(MockNonTerminalA(), RuleSet([Rule(MockNonTerminalA(), MockTerminal())]), "TODO")],
+    [
+        (MockNonTerminalA(), RuleSet([Rule(MockNonTerminalA(), MockTerminal())]), "a"),
+        (
+            MockRepeat(IntParam("m").set_value(3)),
+            RuleSet(
+                [
+                    Rule(
+                        MockRepeat(IntParam("m")),
+                        MockRepeat(IntParam("m") - 1) + MockRepeat(1),
+                        condition=GreaterThan(IntParam("m"), 1),
+                    ),
+                    Rule(
+                        MockRepeat(1, is_base_case=True),
+                        MockTerminal(),
+                    ),
+                ]
+            ),
+            "aaa",
+        ),
+    ],
 )
 def test_to_code(operation: IOperation, rule_set: RuleSet, expected: str):
     algorithm = Algorithm(operation, rule_set)

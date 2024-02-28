@@ -2,10 +2,11 @@ from __future__ import annotations
 
 from abc import ABC, abstractmethod
 
+from gsdl.operation import IImplementation
 from gsdl.parameter import IParam
 
 
-class IOperation(ABC):
+class IOperation(IImplementation, ABC):
 
     @abstractmethod
     def get_params(self) -> list[IParam]:
