@@ -1,18 +1,22 @@
 import pytest
 
-from gsdl.operation import AbstractOperation, IOperation, Wrap
+from gsdl.operation import AbstractOperation, IOperation, Wrap, Concat
 from gsdl.parameter import IParam, Param
 
 
 class MockOperation(AbstractOperation):
+    test_name: str
+
     def __init__(
         self,
         params: list[IParam] = None,
         inputs: list[IOperation] = None,
         is_terminal: bool = False,
         is_base_case: bool = False,
+        test_name: str = None,
     ):
         super().__init__(params, inputs, is_terminal, is_base_case)
+        self.test_name = test_name
 
 
 def test_constructor_no_args_constructs_operation():
@@ -27,22 +31,17 @@ def test_add_combines_operations():
 
     res = a + b + c
 
-    res_a = res
-    res_b = res.get_next()
-    res_c = res_b.get_next()
+    add_outer = res
+    add_inner = res._inputs[0]
+    res_a = res._inputs[1]
+    res_b = res._inputs[0]._inputs[0]
+    res_c = res._inputs[0]._inputs[1]
 
-    assert res_a.get_next() is not None
-    assert res_b.get_next() is not None
-    assert res_c.get_next() is None
-
-    assert res_a._prev_op is None
-    assert res_b._prev_op is res_a
-    assert res_c._prev_op is res_b
-
-
-def test_get_next_no_join_returns_none():
-    mock_operation = MockOperation()
-    assert mock_operation.get_next() is None
+    assert isinstance(add_outer, Concat)
+    assert isinstance(add_inner, Concat)
+    assert isinstance(res_a, MockOperation)
+    assert isinstance(res_b, MockOperation)
+    assert isinstance(res_c, MockOperation)
 
 
 @pytest.mark.parametrize("constructor_params", [([]), ([Param("x")])])
@@ -70,7 +69,7 @@ def test_get_param_values_returns_expected_values(
     [
         (
             MockOperation() + MockOperation(),
-            "MockOperation([], []) + MockOperation([], [])",
+            "Concat(MockOperation([], []), MockOperation([], []))",
         )
     ],
 )
@@ -183,40 +182,36 @@ def test_get_first_non_terminal_with_non_terminal_returns_itself():
 
 
 @pytest.mark.parametrize(
-    "a,b,c,expected_index",
+    "a,b,c,expected_name",
     [
         (
-            MockOperation(is_terminal=False),
-            MockOperation(is_terminal=False),
-            MockOperation(is_terminal=False),
-            0,
+            MockOperation(is_terminal=False, test_name="a"),
+            MockOperation(is_terminal=False, test_name="b"),
+            MockOperation(is_terminal=False, test_name="c"),
+            "a",
         ),
         (
-            MockOperation(is_terminal=True),
-            MockOperation(is_terminal=False),
-            MockOperation(is_terminal=False),
-            1,
+            MockOperation(is_terminal=True, test_name="a"),
+            MockOperation(is_terminal=False, test_name="b"),
+            MockOperation(is_terminal=False, test_name="c"),
+            "b",
         ),
         (
-            MockOperation(is_terminal=True),
-            MockOperation(is_terminal=True),
-            MockOperation(is_terminal=False),
-            2,
+            MockOperation(is_terminal=True, test_name="a"),
+            MockOperation(is_terminal=True, test_name="b"),
+            MockOperation(is_terminal=False, test_name="c"),
+            "c",
         ),
     ],
 )
 def test_get_first_non_terminal_in_next(
-    a: AbstractOperation,
-    b: AbstractOperation,
-    c: AbstractOperation,
-    expected_index: int,
+    a: MockOperation,
+    b: MockOperation,
+    c: MockOperation,
+    expected_name: str,
 ):
     res = a + b + c
-    expected = res
-    while expected_index > 0:
-        expected = expected.get_next()
-        expected_index -= 1
-    assert res.get_first_non_terminal() is expected
+    assert res.get_first_non_terminal().test_name is expected_name
 
 
 @pytest.mark.parametrize(
@@ -261,15 +256,10 @@ def test_expand_operation_non_nested_lhs():
     c = MockOperation()
 
     res = a + b + c
-    res_expected_next_op = res.get_next()
-    res_expected_next_join_op = res._next_join_op
     res.expand_operation(MockOperation())
 
     assert res._parent_op is None
     assert res._parent_op_idx is None
-    assert res._prev_op is None
-    assert res._next_op is res_expected_next_op
-    assert res._next_join_op is res_expected_next_join_op
 
 
 def test_expand_operation_nested_input_lhs():
@@ -279,35 +269,24 @@ def test_expand_operation_nested_input_lhs():
 
     res = MockOperation(inputs=[x + y + z])
     target = res._inputs[0]
-    target_expected_next_op = target._next_op
-    target_expected_next_join_op = target._next_join_op
     target.expand_operation(MockOperation())
 
     assert target._parent_op is res
     assert target._parent_op_idx is 0
-    assert target._prev_op is None
-    assert target._next_op is target_expected_next_op
-    assert target._next_join_op is target_expected_next_join_op
 
     assert isinstance(res._inputs[0], Wrap)
 
 
 def test_expand_operation_nested_input_non_lhs():
-    x = MockOperation()
-    y = MockOperation()
-    z = MockOperation()
+    x = MockOperation(test_name="x")
+    y = MockOperation(test_name="y")
+    z = MockOperation(test_name="z")
 
     res = MockOperation(inputs=[x + y + z])
-    target = res._inputs[0]._next_op
-    target_expected_prev_op = target._prev_op
-    target_expected_next_op = target._next_op
-    target_expected_next_join_op = target._next_join_op
+    target_parent = res._inputs[0]._inputs[0]
+    target = res._inputs[0]._inputs[0]._inputs[1]
     target.expand_operation(MockOperation())
 
-    assert target._parent_op is None
-    assert target._parent_op_idx is None
-    assert target._prev_op is target_expected_prev_op
-    assert target._next_op is target_expected_next_op
-    assert target._next_join_op is target_expected_next_join_op
-
-    assert isinstance(res._inputs[0]._next_op, Wrap)
+    assert target.test_name == "y"
+    assert isinstance(target_parent._inputs[1], Wrap)
+    assert isinstance(target_parent._inputs[1]._inputs[0], MockOperation)

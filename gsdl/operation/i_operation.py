@@ -6,12 +6,13 @@ from gsdl.parameter import IParam
 
 
 class IOperation(ABC):
-    @abstractmethod
-    def get_next(self) -> IOperation | None:
-        raise NotImplementedError
 
     @abstractmethod
     def get_params(self) -> list[IParam]:
+        raise NotImplementedError
+
+    @abstractmethod
+    def get_inputs(self) -> list[IOperation]:
         raise NotImplementedError
 
     @abstractmethod

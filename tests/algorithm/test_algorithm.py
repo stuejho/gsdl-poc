@@ -1,7 +1,9 @@
 import pytest
 
 from gsdl.algorithm import Algorithm
+from gsdl.condition import GreaterThan
 from gsdl.operation import AbstractOperation, IOperation
+from gsdl.parameter import IntParam
 from gsdl.rule import RuleSet, Rule
 
 
@@ -15,6 +17,11 @@ class MockNonTerminalB(AbstractOperation):
 
 class MockNonTerminalC(AbstractOperation):
     pass
+
+
+class MockRepeat(AbstractOperation):
+    def __init__(self, times: IntParam | int, is_base_case: bool = False):
+        super().__init__([times], is_base_case=is_base_case)
 
 
 class MockTerminal(AbstractOperation):
@@ -48,7 +55,24 @@ def test_constructor():
                     Rule(MockNonTerminalC(), MockTerminal()),
                 ]
             ),
-            "(((MockTerminal([], [])) + (MockTerminal([], []))))",
+            "((Concat((MockTerminal([], [])), (MockTerminal([], [])))))",
+        ),
+        (
+            MockRepeat(IntParam("m").set_value(3)),
+            RuleSet(
+                [
+                    Rule(
+                        MockRepeat(IntParam("m")),
+                        MockRepeat(IntParam("m") - 1) + MockRepeat(1),
+                        condition=GreaterThan(IntParam("m"), 1),
+                    ),
+                    Rule(
+                        MockRepeat(1, is_base_case=True),
+                        MockTerminal(),
+                    ),
+                ]
+            ),
+            "((Concat((Concat((MockTerminal([], [])), (MockTerminal([], [])))), (MockTerminal([], [])))))",
         ),
     ],
 )

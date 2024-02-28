@@ -13,7 +13,7 @@ from gsdl.rule import Rule
 def lhs() -> IOperation:
     mock = Mock(spec=IOperation)
     mock.get_params = Mock(return_value=[Param("x")])
-    mock.get_next = Mock(return_value=None)
+    mock.get_inputs = Mock(return_value=[])
     mock.__str__ = Mock(return_value="lhs")
     return mock
 
@@ -23,7 +23,7 @@ def lhs() -> IOperation:
 def rhs() -> IOperation:
     mock = Mock(spec=IOperation)
     mock.get_params = Mock(return_value=[Param("x")])
-    mock.get_next = Mock(return_value=None)
+    mock.get_inputs = Mock(return_value=[])
     mock.__str__ = Mock(return_value="rhs")
     return mock
 

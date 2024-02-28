@@ -2,7 +2,6 @@ from __future__ import annotations
 
 from copy import deepcopy
 
-from gsdl.join import IJoin, Concat
 from gsdl.operation import IOperation
 from gsdl.parameter import IParam
 
@@ -15,9 +14,6 @@ class AbstractOperation(IOperation):
 
     _parent_op: AbstractOperation | None
     _parent_op_idx: int | None
-    _prev_op: AbstractOperation | None
-    _next_op: AbstractOperation | None
-    _next_join_op: IJoin | None
 
     def __init__(
         self,
@@ -39,22 +35,14 @@ class AbstractOperation(IOperation):
         self._is_base_case = is_base_case
         self._parent_op = None
         self._parent_op_idx = None
-        self._prev_op = None
-        self._next_op = None
-        self._next_join_op = None
 
     def __add__(self, other: AbstractOperation):
         a = deepcopy(self)
         b = deepcopy(other)
 
-        a_last_next = a
-        while a_last_next.get_next() is not None:
-            a_last_next = a_last_next.get_next()
-        a_last_next._next_op = b
-        a_last_next._next_join_op = Concat()
+        from gsdl.operation import Concat
 
-        b._prev_op = a_last_next
-        return a
+        return Concat(a, b)
 
     def __deepcopy__(self, memo):
         cls = self.__class__
@@ -64,11 +52,11 @@ class AbstractOperation(IOperation):
             setattr(result, k, deepcopy(v, memo))
         return result
 
-    def get_next(self):
-        return self._next_op
-
     def get_params(self) -> list[IParam]:
         return list(self._params)
+
+    def get_inputs(self) -> list[IOperation]:
+        return list(self._inputs)
 
     def get_param_values(self) -> dict:
         result = {}
@@ -82,9 +70,6 @@ class AbstractOperation(IOperation):
 
     def __str__(self):
         result = self.single_op_str()
-
-        if self._next_op:
-            result += f" {self._next_join_op} {self._next_op}"
 
         return result
 
@@ -108,12 +93,6 @@ class AbstractOperation(IOperation):
             if not input_op.is_implementation():
                 return False
 
-        curr_op = self._next_op
-        while curr_op is not None:
-            if not curr_op.is_implementation():
-                return False
-            curr_op = curr_op._next_op
-
         return self._is_terminal_or_base_case()
 
     def is_terminal(self) -> bool:
@@ -134,12 +113,6 @@ class AbstractOperation(IOperation):
         if not self._is_terminal_or_base_case():
             return self
 
-        next_op = self.get_next()
-        if self.get_next() is not None:
-            candidate = next_op.get_first_non_terminal()
-            if candidate:
-                return candidate
-
         return None
 
     def expand_operation(self, operation: IOperation) -> None:
@@ -149,15 +122,6 @@ class AbstractOperation(IOperation):
 
         expanded_op._parent_op = self._parent_op
         expanded_op._parent_op_idx = self._parent_op_idx
-        expanded_op._prev_op = self._prev_op
-        expanded_op._next_op = self._next_op
-        expanded_op._next_join_op = self._next_join_op
-
-        if self._prev_op:
-            self._prev_op._next_op = expanded_op
-
-        if self._next_op:
-            self._next_op._prev_op = expanded_op
 
         if self._parent_op:
             idx = self._parent_op_idx

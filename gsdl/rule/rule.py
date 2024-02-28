@@ -21,11 +21,13 @@ class Rule(IRule):
 
         self.__add_params(self.lhs.get_params())
 
-        rhs_op = self.rhs
-        while rhs_op is not None:
-            self.__add_params(rhs_op.get_params())
-
-            rhs_op = rhs_op.get_next()
+        self.__add_params(self.rhs.get_params())
+        operations = list(self.rhs.get_inputs())
+        while operations:
+            op = operations.pop()
+            self.__add_params(op.get_params())
+            for rhs_in in op.get_inputs():
+                operations.append(rhs_in)
 
         if self.condition is not None:
             self.__add_params(self.condition.get_params())

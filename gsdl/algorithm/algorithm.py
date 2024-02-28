@@ -29,7 +29,9 @@ class Algorithm:
             print()
         return curr_expansion
 
-    def to_code(self):
+    def to_code(self) -> str:
+        algo = self.to_algorithm()
+
         return "TODO"
 
     def __get_matching_rule(
