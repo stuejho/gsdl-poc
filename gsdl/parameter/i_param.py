@@ -1,6 +1,5 @@
-from __future__ import annotations
-
 from abc import abstractmethod
+from typing import Self
 
 
 class IParam:
@@ -13,7 +12,7 @@ class IParam:
         raise NotImplementedError
 
     @abstractmethod
-    def set_value(self, value: any) -> IParam:
+    def set_value(self, value: any) -> Self:
         raise NotImplementedError
 
     @abstractmethod
