@@ -37,14 +37,16 @@ class Algorithm:
     def __get_matching_rule(
         self, operation: IOperation, param_values: dict
     ) -> IRule | None:
+        result = None
         for rule in self.rule_set.rules():
             rule_copy = deepcopy(rule)
             if not rule_copy.can_evaluate(param_values):
                 continue
             rule_copy.set_param_values(param_values)
             if self.__operation_matches_rule(operation, rule_copy):
-                return rule_copy
-        return None
+                result = rule_copy
+                break
+        return result
 
     @staticmethod
     def __operation_matches_rule(operation: IOperation, rule: IRule) -> bool:
