@@ -47,7 +47,7 @@ def test_constructor():
         (
             MockNonTerminalA(),
             RuleSet([Rule(MockNonTerminalA(), MockTerminal())]),
-            "((MockTerminal([], [])))",
+            "(MockTerminal([], []))",
         ),
         (
             MockNonTerminalA(),
@@ -58,7 +58,7 @@ def test_constructor():
                     Rule(MockNonTerminalC(), MockTerminal()),
                 ]
             ),
-            "((Concat((MockTerminal([], [])), (MockTerminal([], [])))))",
+            "(Concat(MockTerminal([], []), MockTerminal([], [])))",
         ),
         (
             MockRepeat(IntParam("m").set_value(3)),
@@ -75,7 +75,7 @@ def test_constructor():
                     ),
                 ]
             ),
-            "((Concat((Concat((MockTerminal([], [])), (MockTerminal([], [])))), (MockTerminal([], [])))))",
+            "(Concat(Concat(MockTerminal([], []), MockTerminal([], [])), MockTerminal([], [])))",
         ),
     ],
 )

@@ -117,9 +117,7 @@ class AbstractOperation(IOperation, ABC):
         return None
 
     def expand_operation(self, operation: IOperation) -> None:
-        from gsdl.operation import Wrap
-
-        expanded_op = Wrap(operation)
+        expanded_op = operation
 
         expanded_op._parent_op = self._parent_op
         expanded_op._parent_op_idx = self._parent_op_idx

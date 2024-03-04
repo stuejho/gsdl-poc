@@ -274,7 +274,7 @@ def test_expand_operation_nested_input_lhs():
     assert target._parent_op is res
     assert target._parent_op_idx is 0
 
-    assert isinstance(res._inputs[0], Wrap)
+    assert isinstance(res._inputs[0], MockOperation)
 
 
 def test_expand_operation_nested_input_non_lhs():
@@ -283,14 +283,16 @@ def test_expand_operation_nested_input_non_lhs():
     z = MockOperation(test_name="z")
 
     res = MockOperation(inputs=[x + y + z])
-    target = res._inputs[0]._inputs[0]._inputs[1]
-    target_parent = res._inputs[0]._inputs[0]
-    target.expand_operation(MockOperation())
+    target_y = res._inputs[0]._inputs[0]._inputs[1]
+    target_y_parent = res._inputs[0]._inputs[0]
 
-    assert isinstance(target, MockOperation)
-    assert target.test_name == "y"
-    assert isinstance(target_parent._inputs[1], Wrap)
-    assert isinstance(target_parent._inputs[1]._inputs[0], MockOperation)
+    target_y.expand_operation(MockOperation(test_name="expanded"))
+    expanded_target_y = target_y_parent._inputs[1]
+
+    assert isinstance(target_y, MockOperation)
+    assert target_y.test_name == "y"
+    assert isinstance(expanded_target_y, MockOperation)
+    assert expanded_target_y.test_name == "expanded"
 
 
 def test_to_code_returns_exception():
