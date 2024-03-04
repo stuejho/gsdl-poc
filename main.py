@@ -7,10 +7,6 @@ from gsdl.rule import Rule, RuleSet
 
 def main():
     m = IntParam("m")
-    k = IntParam("k")
-    l = IntParam("l")
-    x = Param("x")
-    y = Param("y")
 
     rules = [
         Rule(Repeat(m), Repeat(m - 1) + Repeat(1), condition=GreaterThan(m, 1)),
