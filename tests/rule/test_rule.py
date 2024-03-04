@@ -21,9 +21,17 @@ def lhs() -> IOperation:
 @pytest.fixture
 @patch.multiple(IOperation, __abstractmethods__=set())
 def rhs() -> IOperation:
+    inner_input_mock = Mock(spec=IOperation)
+    inner_input_mock.get_params = Mock(return_value=[Param("q"), Param("r")])
+    inner_input_mock.get_inputs = Mock(return_value=[])
+
+    input_mock = Mock(spec=IOperation)
+    input_mock.get_params = Mock(return_value=[Param("a"), Param("b")])
+    input_mock.get_inputs = Mock(return_value=[inner_input_mock])
+
     mock = Mock(spec=IOperation)
     mock.get_params = Mock(return_value=[Param("x")])
-    mock.get_inputs = Mock(return_value=[])
+    mock.get_inputs = Mock(return_value=[input_mock])
     mock.__str__ = Mock(return_value="rhs")
     return mock
 
