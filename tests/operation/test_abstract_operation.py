@@ -290,3 +290,9 @@ def test_expand_operation_nested_input_non_lhs():
     assert target.test_name == "y"
     assert isinstance(target_parent._inputs[1], Wrap)
     assert isinstance(target_parent._inputs[1]._inputs[0], MockOperation)
+
+
+def test_to_code_returns_exception():
+    x = MockOperation()
+    with pytest.raises(Exception):
+        x.to_code()
