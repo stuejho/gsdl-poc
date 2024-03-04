@@ -97,7 +97,7 @@ def test_set_param_values_without_param_values_does_not_update_param_values(
     for p in set_params:
         try:
             v = p.get_value()
-        except:
+        except RuntimeError:
             v = None
         assert v is None
 

@@ -41,9 +41,9 @@ def test_get_value_after_set_value_returns_value(
 def test_get_value_without_set_value_throws_exception(
     int_param: IntParam, expected_message: str
 ) -> None:
-    with pytest.raises(Exception) as e_info:
+    with pytest.raises(RuntimeError) as e_info:
         int_param.get_value()
-    assert e_info.type is Exception
+    assert e_info.type is RuntimeError
     assert expected_message == str(e_info.value)
 
 

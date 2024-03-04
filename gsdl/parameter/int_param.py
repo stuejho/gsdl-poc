@@ -29,7 +29,7 @@ class IntParam(AbstractParam):
 
     def __int__(self):
         if self.value is None:
-            raise Exception("Value has not been set")
+            raise RuntimeError("Value has not been set")
         result = self.value
         for operation in self.math_operations:
             result = operation(result)
