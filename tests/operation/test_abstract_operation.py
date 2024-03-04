@@ -283,10 +283,11 @@ def test_expand_operation_nested_input_non_lhs():
     z = MockOperation(test_name="z")
 
     res = MockOperation(inputs=[x + y + z])
-    target_parent = res._inputs[0]._inputs[0]
     target = res._inputs[0]._inputs[0]._inputs[1]
+    target_parent = res._inputs[0]._inputs[0]
     target.expand_operation(MockOperation())
 
+    assert isinstance(target, MockOperation)
     assert target.test_name == "y"
     assert isinstance(target_parent._inputs[1], Wrap)
     assert isinstance(target_parent._inputs[1]._inputs[0], MockOperation)
