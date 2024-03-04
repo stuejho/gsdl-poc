@@ -1,6 +1,6 @@
 import pytest
 
-from gsdl.operation import AbstractOperation, IOperation, Wrap, Concat
+from gsdl.operation import AbstractOperation, IOperation, Concat
 from gsdl.parameter import IParam, Param
 
 

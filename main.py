@@ -1,7 +1,7 @@
 from gsdl.algorithm import Algorithm
 from gsdl.condition import GreaterThan
 from gsdl.operation import Repeat, Terminal
-from gsdl.parameter import IntParam, Param
+from gsdl.parameter import IntParam
 from gsdl.rule import Rule, RuleSet
 
 
