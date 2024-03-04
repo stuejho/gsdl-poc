@@ -2,7 +2,7 @@ from unittest.mock import patch, Mock
 
 import pytest
 
-from gsdl.operation import Wrap, IOperation, Terminal
+from gsdl.operation import IOperation, Terminal
 
 
 @pytest.fixture

@@ -1,5 +1,3 @@
-from typing import TYPE_CHECKING
-
 from gsdl.condition import ICondition
 from gsdl.operation import IOperation
 from gsdl.parameter import IParam
