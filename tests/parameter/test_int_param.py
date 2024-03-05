@@ -32,29 +32,28 @@ def test_get_value_after_set_value_returns_value(
 
 
 @pytest.mark.parametrize(
-    "int_param,expected_message",
+    "int_param,expected",
     [
-        (IntParam("m"), "Value has not been set"),
-        (IntParam("hello"), "Value has not been set"),
+        (IntParam("m"), None),
+        (IntParam("hello"), None),
     ],
 )
-def test_get_value_without_set_value_throws_exception(
-    int_param: IntParam, expected_message: str
+def test_get_value_without_set_value_returns_none(
+    int_param: IntParam, expected: any
 ) -> None:
-    with pytest.raises(RuntimeError) as e_info:
-        int_param.get_value()
-    assert e_info.type is RuntimeError
-    assert expected_message == str(e_info.value)
+    v = int_param.get_value()
+    assert v == expected
 
 
 @pytest.mark.parametrize(
     "int_param,set_value,expected_value",
     [
-        (IntParam("m"), 0, "0"),
-        (IntParam("hello"), 1, "1"),
+        (IntParam("m"), 0, "m=0"),
+        (IntParam("hello"), 1, "hello=1"),
+        (IntParam("hello") - 1, 1, "(hello - 1)=0"),
     ],
 )
-def test_str_returns_string(
+def test_str_returns_expected_string(
     int_param: IntParam, set_value: int, expected_value: str
 ) -> None:
     int_param.set_value(set_value)
@@ -112,3 +111,11 @@ def test_gt_int_param_compared_with_smaller_value_returns_false() -> None:
     a.set_value(0)
 
     assert (a > 1) is False
+
+
+def test_copy_returns_copy() -> None:
+    a = IntParam("a")
+    cp = a.make_copy("cp")
+    assert a is not cp
+    assert a.name == "a"
+    assert cp.name == "cp"

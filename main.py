@@ -14,11 +14,10 @@ def main():
     ]
     rule_set = RuleSet(rules)
 
-    z = IntParam("m")
-    z.set_value(5)
-    r = Repeat(z)
-    a = Algorithm(r, rule_set)
+    repeat = Repeat(IntParam("m").set_value(5))
+    a = Algorithm(repeat, rule_set)
     print(a.to_algorithm())
+    print(a.to_code())
 
 
 if __name__ == "__main__":

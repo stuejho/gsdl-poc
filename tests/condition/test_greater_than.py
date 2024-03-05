@@ -11,7 +11,7 @@ def test_str_returns_expected_str() -> None:
 
     gt = GreaterThan(a, b)
 
-    assert str(gt) == "1 > 2"
+    assert str(gt) == "a=1 > b=2"
 
 
 def test_get_params_returns_constructor_params() -> None:

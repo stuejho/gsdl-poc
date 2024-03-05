@@ -22,4 +22,6 @@ class AbstractParam(IParam, ABC):
         return self
 
     def __str__(self):
-        return str(self.get_value())
+        if self.value is None:
+            return f"{self.get_name()}"
+        return f"{self.get_name()} = {self.get_value()}"

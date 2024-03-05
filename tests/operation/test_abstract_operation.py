@@ -88,7 +88,7 @@ def test_str_returns_expected_string(operation: AbstractOperation, expected: str
             MockOperation(
                 params=[Param("a").set_value("a"), Param("b").set_value("b")]
             ),
-            "MockOperation([a, b], [])",
+            "MockOperation([a = a, b = b], [])",
         ),
         (
             MockOperation(inputs=[MockOperation()]),
