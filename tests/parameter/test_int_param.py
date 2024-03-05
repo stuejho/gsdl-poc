@@ -45,9 +45,17 @@ def test_get_value_without_set_value_returns_none(
     assert v == expected
 
 
+def test_int_without_value_raises_exception():
+    int_param = IntParam("a")
+    with pytest.raises(RuntimeError) as e_info:
+        int(int_param)
+    assert e_info
+
+
 @pytest.mark.parametrize(
     "int_param,set_value,expected_value",
     [
+        (IntParam("m"), None, "m"),
         (IntParam("m"), 0, "m=0"),
         (IntParam("hello"), 1, "hello=1"),
         (IntParam("hello") - 1, 1, "(hello - 1)=0"),

@@ -43,7 +43,7 @@ class IntParam(AbstractParam):
                 return self.value - other
             case operator.MULTIPLY:
                 return self.value * other
-            case _:
+            case _:  # pragma: no cover
                 raise NotImplementedError(f"Operator {operator} not implemented")
 
     def __deepcopy__(self, memo):

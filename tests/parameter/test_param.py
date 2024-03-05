@@ -34,6 +34,7 @@ def test_get_value_after_set_value_returns_value(
 @pytest.mark.parametrize(
     "param,set_value,expected_value",
     [
+        (Param("m"), None, "m"),
         (Param("m"), 0, "m = 0"),
         (Param("hello"), 1, "hello = 1"),
     ],
