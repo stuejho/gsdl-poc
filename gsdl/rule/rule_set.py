@@ -27,9 +27,6 @@ class RuleSet:
             )
             renamed_param_values = self.__rename_param_values(param_values, rename_map)
 
-            if not rule_copy.can_evaluate(renamed_param_values):
-                continue
-
             rule_copy.set_param_values(renamed_param_values)
             if self.__operation_matches_rule(operation, rule_copy):
                 result = rule_copy
