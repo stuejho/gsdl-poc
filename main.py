@@ -1,28 +1,23 @@
-from gsdl import algorithm
-from gsdl.algorithm import DenseMatVecMul
-from gsdl.algorithm.compose import Compose
-from gsdl.model import DenseMatrix, Composition
+from gsdl.algorithm import Algorithm
+from gsdl.condition import GreaterThan
+from gsdl.operation import Repeat, Terminal
+from gsdl.parameter import IntParam
+from gsdl.rule import Rule, RuleSet
 
 
 def main():
-    a_mat = DenseMatrix(5, 5, 1, 1, "A")
-    mm_head = DenseMatVecMul.header("mat_vec_mul", "A", "x", "y")
-    mm_code = DenseMatVecMul.code(a_mat, "x", "y")
-    mm_call = DenseMatVecMul.call("mat_vec_mul", "A", "a", "b")
-    print(mm_head)
-    print(mm_code)
+    m = IntParam("m")
 
-    a_mat = DenseMatrix(5, 5, 1, 1, "A")
-    b_mat = DenseMatrix(5, 5, 1, 1, "B")
-    comp = Composition(A=a_mat, B=b_mat)
-    comp_head = Compose.header("compose", "A", "B", "x", "y")
-    comp_code = Compose.code(comp, "x", "y")
-    comp_call = Compose.call("compose", "A", "B", "a", "b")
-    print(comp_head)
-    print(comp_code)
+    rules = [
+        Rule(Repeat(m), Repeat(m - 1) + Repeat(1), condition=GreaterThan(m, 1)),
+        Rule(Repeat(1, is_base_case=True), Terminal("a")),
+    ]
+    rule_set = RuleSet(rules)
 
-    print(mm_call)
-    print(comp_call)
+    repeat = Repeat(5)
+    a = Algorithm(repeat, rule_set)
+    print(a.to_algorithm())
+    print(a.to_code())
 
 
 if __name__ == "__main__":
