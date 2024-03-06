@@ -7,7 +7,6 @@ from gsdl.parameter.int_param import IntParam
 class Repeat(AbstractOperation):
 
     CONST_NAME = "const"
-    PARAM_NAME = "m"
 
     def __init__(self, times: IntParam | int, is_base_case: bool = False):
         if isinstance(times, int):
