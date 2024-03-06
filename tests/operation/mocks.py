@@ -23,6 +23,11 @@ class MockRepeat(AbstractOperation):
         super().__init__([t], is_base_case=is_base_case)
 
 
+class MockTwoParamNonTerminal(AbstractOperation):
+    def __init__(self, param_a: IntParam, param_b: IntParam):
+        super().__init__([param_a, param_b])
+
+
 class MockTerminal(AbstractOperation):
     def __init__(self):
         super().__init__(is_terminal=True)

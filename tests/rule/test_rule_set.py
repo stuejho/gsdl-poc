@@ -1,10 +1,10 @@
 import pytest
 
-from gsdl.condition import GreaterThan
+from gsdl.condition import GreaterThan, EqualTo
 from gsdl.operation import IOperation
 from gsdl.parameter import IntParam
 from gsdl.rule import RuleSet, Rule
-from tests.operation.mocks import MockRepeat, MockTerminal
+from tests.operation.mocks import MockRepeat, MockTerminal, MockTwoParamNonTerminal
 
 
 def test_constructor() -> None:
@@ -26,6 +26,11 @@ def test_rules_returns_copy() -> None:
     [
         (
             [
+                Rule(
+                    MockTwoParamNonTerminal(IntParam("m"), IntParam("n")),
+                    MockRepeat(50) + MockRepeat(50),
+                    condition=EqualTo(IntParam("m"), 100),
+                ),
                 Rule(
                     MockRepeat(IntParam("m")),
                     MockRepeat(IntParam("m") - 1) + MockRepeat(1),

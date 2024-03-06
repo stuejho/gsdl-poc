@@ -35,6 +35,9 @@ class IntParam(AbstractParam):
             result = self.__apply(operator, other)
         return result
 
+    def __eq__(self, other):
+        return int(self) == int(other)
+
     def __apply(self, operator: Operator, other: IntParam | int):
         match operator:
             case operator.ADD:
