@@ -1,5 +1,3 @@
-from copy import deepcopy
-
 from gsdl.operation import AbstractOperation
 from gsdl.parameter.int_param import IntParam
 

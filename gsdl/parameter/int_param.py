@@ -1,7 +1,7 @@
 from __future__ import annotations
 
 from copy import deepcopy
-from typing import Callable, Self
+from typing import Self
 
 from gsdl.parameter import AbstractParam, Operator
 
