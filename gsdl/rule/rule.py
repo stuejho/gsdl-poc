@@ -48,12 +48,15 @@ class Rule(IRule):
         for param in self._params:
             param_name = param.get_name()
             param_value = param_values.get(param_name)
-            param.set_value(param_value)
+            if param_value is not None:
+                param.set_value(param_value)
         return list(self._params)
 
     def can_evaluate(self, param_values: dict) -> bool:
         for param in self._params:
-            if not param.get_name() in param_values.keys():
+            if (param.get_name() not in param_values.keys()) and (
+                param.get_value() is None
+            ):
                 return False
         return True
 

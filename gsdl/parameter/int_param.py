@@ -47,7 +47,7 @@ class IntParam(AbstractParam):
                 raise NotImplementedError(f"Operator {operator} not implemented")
 
     def __deepcopy__(self, memo):
-        result = IntParam(self.name)
+        result = super().__deepcopy__(memo)
         result.math_operations = deepcopy(self.math_operations)
         return result
 

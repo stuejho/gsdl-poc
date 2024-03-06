@@ -50,7 +50,8 @@ class AbstractOperation(IOperation, ABC):
         result = cls.__new__(cls)
         memo[id(self)] = result
         for k, v in self.__dict__.items():
-            setattr(result, k, deepcopy(v, memo))
+            cp = deepcopy(v, memo)
+            setattr(result, k, cp)
         return result
 
     def get_params(self) -> list[IParam]:

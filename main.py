@@ -14,7 +14,7 @@ def main():
     ]
     rule_set = RuleSet(rules)
 
-    repeat = Repeat(IntParam("m").set_value(5))
+    repeat = Repeat(5)
     a = Algorithm(repeat, rule_set)
     print(a.to_algorithm())
     print(a.to_code())

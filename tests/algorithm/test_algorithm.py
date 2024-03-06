@@ -2,34 +2,16 @@ import pytest
 
 from gsdl.algorithm import Algorithm
 from gsdl.condition import GreaterThan
-from gsdl.operation import AbstractOperation, IOperation
+from gsdl.operation import IOperation
 from gsdl.parameter import IntParam
 from gsdl.rule import RuleSet, Rule
-
-
-class MockNonTerminalA(AbstractOperation):
-    pass
-
-
-class MockNonTerminalB(AbstractOperation):
-    pass
-
-
-class MockNonTerminalC(AbstractOperation):
-    pass
-
-
-class MockRepeat(AbstractOperation):
-    def __init__(self, times: IntParam | int, is_base_case: bool = False):
-        super().__init__([times], is_base_case=is_base_case)
-
-
-class MockTerminal(AbstractOperation):
-    def __init__(self):
-        super().__init__(is_terminal=True)
-
-    def to_code(self) -> str:
-        return "a"
+from tests.operation.mocks import (
+    MockNonTerminalA,
+    MockTerminal,
+    MockNonTerminalB,
+    MockNonTerminalC,
+    MockRepeat,
+)
 
 
 def test_constructor():
