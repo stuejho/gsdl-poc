@@ -1,8 +1,8 @@
-from abc import abstractmethod
+from abc import abstractmethod, ABC
 from typing import Self
 
 
-class IParam:
+class IParam(ABC):
     @abstractmethod
     def get_name(self) -> str:
         raise NotImplementedError
