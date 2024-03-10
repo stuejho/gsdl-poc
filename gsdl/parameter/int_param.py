@@ -3,7 +3,8 @@ from __future__ import annotations
 from copy import deepcopy
 from typing import Self
 
-from gsdl.parameter import AbstractParam, Operator
+from gsdl.parameter import AbstractParam
+from gsdl.parameter import Operator
 
 
 class IntParam(AbstractParam):
@@ -24,9 +25,6 @@ class IntParam(AbstractParam):
         cp.math_operations.append((Operator.MULTIPLY, other))
         return cp
 
-    def __gt__(self, other: IntParam | int) -> bool:
-        return int(self) > int(other)
-
     def __int__(self):
         if self.value is None:
             raise RuntimeError("Value has not been set")
@@ -34,9 +32,6 @@ class IntParam(AbstractParam):
         for operator, other in self.math_operations:
             result = self.__apply(operator, other)
         return result
-
-    def __eq__(self, other):
-        return int(self) == int(other)
 
     def __apply(self, operator: Operator, other: IntParam | int):
         match operator:

@@ -9,7 +9,7 @@ class ICondition(ABC):
         raise NotImplementedError
 
     @abstractmethod
-    def is_match(self) -> bool:
+    def evaluate(self) -> bool:
         raise NotImplementedError
 
     @abstractmethod

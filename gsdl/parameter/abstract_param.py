@@ -34,3 +34,24 @@ class AbstractParam(IParam, ABC):
         for k, v in self.__dict__.items():
             setattr(result, k, deepcopy(v, memo))
         return result
+
+    def __add__(self, other: any) -> IParam:
+        raise NotImplementedError
+
+    def __sub__(self, other: any) -> IParam:
+        raise NotImplementedError
+
+    def __mul__(self, other: any) -> IParam:
+        raise NotImplementedError
+
+    def __lt__(self, other: any):
+        from gsdl.condition import LessThan
+        return LessThan(self, other)
+
+    def __gt__(self, other: any):
+        from gsdl.condition import GreaterThan
+        return GreaterThan(self, other)
+
+    def __eq__(self, other: any):
+        from gsdl.condition import EqualTo
+        return EqualTo(self, other)

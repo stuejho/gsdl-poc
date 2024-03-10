@@ -13,5 +13,11 @@ class AbstractCondition(ICondition, ABC):
     def get_params(self) -> list[IParam]:
         return list(self.params)
 
-    def is_match(self):
-        return self.condition(*self.params)
+    def evaluate(self):
+        values = []
+        for p in self.params:
+            if isinstance(p, IParam):
+                values.append(p.get_value())
+            else:
+                values.append(p)
+        return self.condition(*values)

@@ -111,14 +111,14 @@ def test_gt_int_param_compared_with_smaller_value_returns_true() -> None:
     a = IntParam("a")
     a.set_value(0)
 
-    assert (a > -1) is True
+    assert (a > -1).evaluate() is True
 
 
 def test_gt_int_param_compared_with_smaller_value_returns_false() -> None:
     a = IntParam("a")
     a.set_value(0)
 
-    assert (a > 1) is False
+    assert (a > 1).evaluate() is False
 
 
 @pytest.mark.parametrize(
@@ -133,7 +133,7 @@ def test_gt_int_param_compared_with_smaller_value_returns_false() -> None:
 def test_eq_returns_expected(
     lhs: IntParam, rhs: IntParam | int, expected: bool
 ) -> None:
-    assert (lhs == rhs) is expected
+    assert (lhs == rhs).evaluate() is expected
 
 
 def test_copy_returns_copy() -> None:

@@ -56,5 +56,5 @@ class RuleSet:
     @staticmethod
     def __operation_matches_rule(operation: IOperation, rule: IRule) -> bool:
         return (type(operation) is type(rule.get_lhs())) and (
-            (rule.get_condition() is None) or (rule.get_condition().is_match())
+            (rule.get_condition() is None) or (rule.get_condition().evaluate())
         )

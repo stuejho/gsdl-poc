@@ -37,7 +37,7 @@ def test_is_match_lhs_equal_to_rhs_evaluates_true() -> None:
 
     et = EqualTo(a, b)
 
-    assert et.is_match() is True
+    assert et.evaluate() is True
 
 
 def test_is_match_lhs_not_equal_to_rhs_evaluates_false() -> None:
@@ -49,4 +49,4 @@ def test_is_match_lhs_not_equal_to_rhs_evaluates_false() -> None:
 
     et = EqualTo(a, b)
 
-    assert et.is_match() is False
+    assert et.evaluate() is False
