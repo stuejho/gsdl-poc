@@ -52,12 +52,15 @@ class AbstractParam(IParam, ABC):
 
     def __lt__(self, other: any):
         from gsdl.condition import LessThan
+
         return LessThan(self, other)
 
     def __gt__(self, other: any):
         from gsdl.condition import GreaterThan
+
         return GreaterThan(self, other)
 
     def __eq__(self, other: any):
         from gsdl.condition import EqualTo
+
         return EqualTo(self, other)
