@@ -22,6 +22,9 @@ class IParam(ABC):
     def set_value(self, value: any) -> Self:
         raise NotImplementedError
 
+    def get_params(self) -> list[Self]:
+        raise NotImplementedError
+
     @abstractmethod
     def __str__(self) -> str:
         raise NotImplementedError

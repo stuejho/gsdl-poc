@@ -13,16 +13,19 @@ class IntParam(AbstractParam):
     def __add__(self, other: IntParam | int) -> IntParam:
         cp = deepcopy(self)
         cp.math_operations.append((Operator.ADD, other))
+        cp.params.append(other)
         return cp
 
     def __sub__(self, other: IntParam | int) -> IntParam:
         cp = deepcopy(self)
         cp.math_operations.append((Operator.SUBTRACT, other))
+        cp.params.append(other)
         return cp
 
     def __mul__(self, other: IntParam | int) -> IntParam:
         cp = deepcopy(self)
         cp.math_operations.append((Operator.MULTIPLY, other))
+        cp.params.append(other)
         return cp
 
     def __int__(self):
@@ -36,11 +39,11 @@ class IntParam(AbstractParam):
     def __apply(self, operator: Operator, other: IntParam | int):
         match operator:
             case operator.ADD:
-                return self.value + other
+                return self.value + int(other)
             case operator.SUBTRACT:
-                return self.value - other
+                return self.value - int(other)
             case operator.MULTIPLY:
-                return self.value * other
+                return self.value * int(other)
             case _:  # pragma: no cover
                 raise NotImplementedError(f"Operator {operator} not implemented")
 

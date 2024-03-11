@@ -1,5 +1,6 @@
 from abc import ABC
 from copy import deepcopy
+from typing import Self
 
 from gsdl.parameter import IParam
 
@@ -7,10 +8,12 @@ from gsdl.parameter import IParam
 class AbstractParam(IParam, ABC):
     name: str
     value: any
+    params: list[IParam]
 
     def __init__(self, name: str):
         self.name = name
         self.value = None
+        self.params = [self]
 
     def get_name(self):
         return self.name
@@ -21,6 +24,9 @@ class AbstractParam(IParam, ABC):
     def set_value(self, value: any):
         self.value = value
         return self
+
+    def get_params(self) -> list[Self]:
+        return list(self.params)
 
     def __str__(self):
         if self.value is None:

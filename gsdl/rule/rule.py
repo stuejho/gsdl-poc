@@ -1,16 +1,24 @@
 from gsdl.condition import ICondition
 from gsdl.operation import IOperation
 from gsdl.parameter import IParam
+from gsdl.set_builder import ISetBuilder
 from gsdl.rule import IRule
 
 
 class Rule(IRule):
     _params: list[IParam] = []
 
-    def __init__(self, lhs: IOperation, rhs: IOperation, condition: ICondition = None):
+    def __init__(
+        self,
+        lhs: IOperation,
+        rhs: IOperation,
+        condition: ICondition = None,
+        parameter_set: ISetBuilder = None,
+    ):
         self.lhs = lhs
         self.rhs = rhs
         self.condition = condition
+        self.parameter_set = parameter_set
 
         self.__post_init__()
 
