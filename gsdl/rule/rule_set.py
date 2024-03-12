@@ -13,25 +13,41 @@ class RuleSet:
     def rules(self):
         return list(self.__rules)
 
-    def get_matching_rule(self, operation: IOperation) -> IRule | None:
+    def get_first_matching_rule(self, operation: IOperation) -> IRule | None:
         result = None
-        param_values = operation.get_param_values()
         for rule in self.rules():
             if not isinstance(rule.get_lhs(), operation.__class__):
                 continue
 
-            rule_copy = deepcopy(rule)
-
-            rename_map = self.__get_rename_map(
-                operation.get_params(), rule_copy.get_lhs().get_params()
-            )
-            renamed_param_values = self.__rename_param_values(param_values, rename_map)
-
-            rule_copy.set_param_values(renamed_param_values)
+            rule_copy = self.__rule_with_operation_values(rule, operation)
             if self.__operation_matches_rule(operation, rule_copy):
                 result = rule_copy
                 break
         return result
+
+    def get_matching_rules(self, operation: IOperation) -> list[IRule]:
+        result = []
+        for rule in self.rules():
+            if not isinstance(rule.get_lhs(), operation.__class__):
+                continue
+
+            rule_copy = self.__rule_with_operation_values(rule, operation)
+            if self.__operation_matches_rule(operation, rule_copy):
+                result.append(rule_copy)
+        return result
+
+    def __rule_with_operation_values(self, rule: IRule, operation: IOperation) -> IRule:
+        rule_copy = deepcopy(rule)
+
+        rename_map = self.__get_rename_map(
+            operation.get_params(), rule_copy.get_lhs().get_params()
+        )
+        renamed_param_values = self.__rename_param_values(
+            operation.get_param_values(), rename_map
+        )
+
+        rule_copy.set_param_values(renamed_param_values)
+        return rule_copy
 
     @staticmethod
     def __get_rename_map(
