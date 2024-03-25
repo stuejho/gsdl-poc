@@ -1,7 +1,7 @@
 import pytest
 
 from gsdl.algorithm import Algorithm
-from gsdl.condition import GreaterThan
+from gsdl.condition import GreaterThan, EqualTo
 from gsdl.operation import IOperation
 from gsdl.parameter import IntParam
 from gsdl.rule import RuleSet, Rule
@@ -52,8 +52,9 @@ def test_constructor():
                         condition=GreaterThan(IntParam("m"), 1),
                     ),
                     Rule(
-                        MockRepeat(1, is_base_case=True),
+                        MockRepeat(IntParam("m"), is_base_case=True),
                         MockTerminal(),
+                        condition=EqualTo(IntParam("m"), 1),
                     ),
                 ]
             ),
@@ -65,6 +66,54 @@ def test_to_algorithm(operation: IOperation, rule_set: RuleSet, expected: str):
     algorithm = Algorithm(operation, rule_set)
 
     assert str(algorithm.to_algorithm()) == expected
+
+
+@pytest.mark.parametrize(
+    "operation,rule_set,expected_num_expansions",
+    [
+        (
+            MockNonTerminalA(),
+            RuleSet([Rule(MockNonTerminalA(), MockTerminal())]),
+            1,
+        ),
+        (
+            MockNonTerminalA(),
+            RuleSet(
+                [
+                    Rule(MockNonTerminalA(), MockNonTerminalB() + MockNonTerminalC()),
+                    Rule(MockNonTerminalB(), MockTerminal()),
+                    Rule(MockNonTerminalC(), MockTerminal()),
+                ]
+            ),
+            1,
+        ),
+        (
+            MockRepeat(IntParam("m").set_value(3)),
+            RuleSet(
+                [
+                    Rule(
+                        MockRepeat(IntParam("m")),
+                        MockRepeat(IntParam("m") - 1) + MockRepeat(1),
+                        condition=GreaterThan(IntParam("m"), 1),
+                    ),
+                    Rule(
+                        MockRepeat(IntParam("m"), is_base_case=True),
+                        MockTerminal(),
+                        condition=EqualTo(IntParam("m"), 1),
+                    ),
+                ]
+            ),
+            1,
+        ),
+    ],
+)
+def test_all_expansions(
+    operation: IOperation, rule_set: RuleSet, expected_num_expansions: int
+):
+    algorithm = Algorithm(operation, rule_set)
+    expansions = algorithm.all_expansions()
+
+    assert len(expansions) == expected_num_expansions
 
 
 @pytest.mark.parametrize(

@@ -47,3 +47,7 @@ class IOperation(IImplementation, ABC):
     @abstractmethod
     def single_op_str(self) -> str:
         raise NotImplementedError
+
+    @abstractmethod
+    def copy(self) -> IOperation:
+        raise NotImplementedError

@@ -129,3 +129,6 @@ class AbstractOperation(IOperation, ABC):
 
     def to_code(self) -> str:
         raise Exception("This operation cannot be converted to code")
+
+    def copy(self) -> IOperation:
+        return deepcopy(self)
