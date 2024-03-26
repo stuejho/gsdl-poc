@@ -11,7 +11,7 @@ class SetBuilder(ISetBuilder):
     def __init__(
         self,
         parameters: tuple[IParam, ...],
-        generator_tuples: tuple[[IParam, IGenerator], ...],
+        generator_tuples: tuple[tuple[IParam, IGenerator], ...],
         predicate: ICondition,
     ):
         self.parameters = parameters
@@ -36,8 +36,22 @@ class SetBuilder(ISetBuilder):
             if predicate.evaluate():
                 yield cand_params
 
+    def get_params(self) -> list[IParam]:
+        result = []
+        for _, generator in self.generator_tuples:
+            result.extend(generator.get_params())
+        result.extend(self.predicate.get_params())
+        return result
+
     @staticmethod
     def _parameterize_generator(
         param: IParam, generator: IGenerator
     ) -> Iterator[IParam]:
         return generator.generate(param)
+
+    @staticmethod
+    def to_dict(params: tuple[IParam, ...]):
+        result = {}
+        for p in params:
+            result[p.get_name()] = p.get_value()
+        return result

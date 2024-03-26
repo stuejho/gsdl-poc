@@ -38,6 +38,9 @@ class Rule(IRule):
         if self.condition is not None:
             self.__add_params(self.condition.get_params())
 
+        if self.parameter_set is not None:
+            self.__add_params(self.parameter_set.get_params())
+
     def __add_params(self, params: list[IParam]):
         for param in params:
             if isinstance(param, IParam):
@@ -59,6 +62,9 @@ class Rule(IRule):
             if param_value is not None:
                 param.set_value(param_value)
         return list(self._params)
+
+    def get_parameter_set(self) -> ISetBuilder:
+        return self.parameter_set
 
     def can_evaluate(self, param_values: dict) -> bool:
         for param in self._params:

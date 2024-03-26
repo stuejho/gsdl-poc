@@ -33,3 +33,15 @@ class IntGenerator(IGenerator):
         if isinstance(self.step, IntParam):
             return self.step.get_value()
         return self.step
+
+    def get_params(self) -> list[IParam]:
+        result = []
+
+        if isinstance(self.start, IParam):
+            result.append(self.start)
+        if isinstance(self.stop, IParam):
+            result.append(self.stop)
+        if isinstance(self.step, IParam):
+            result.append(self.step)
+
+        return result

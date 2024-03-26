@@ -91,21 +91,21 @@ def test_get_matching_first_rule(
                 ),
                 Rule(
                     MockRepeat(IntParam("m")),
-                    MockRepeat(IntParam("m") - 1) + MockRepeat(1),
+                    MockRepeat(IntParam("l")) + MockRepeat(IntParam("k")),
                     condition=GreaterThan(IntParam("m"), 1),
                     parameter_set=SetBuilder(
                         (IntParam("l"), IntParam("k")),
                         (
                             (
                                 IntParam("l"),
-                                IntGenerator(0, (IntParam("m").set_value(5)), 1),
+                                IntGenerator(0, (IntParam("m").set_value(3)), 1),
                             ),
                             (
                                 IntParam("k"),
-                                IntGenerator(0, (IntParam("m").set_value(5)), 1),
+                                IntGenerator(0, (IntParam("m").set_value(3)), 1),
                             ),
                         ),
-                        IntParam("l") + IntParam("k") == IntParam("m").set_value(5),
+                        IntParam("l") + IntParam("k") == IntParam("m").set_value(3),
                     ),
                 ),
                 Rule(
@@ -115,11 +115,13 @@ def test_get_matching_first_rule(
                 ),
             ],
             MockRepeat(3),
-            2,
+            # m > 1, and (m - 1) + 1
+            # m > 1, and (l + k) variants
+            3,
         ),
     ],
 )
-def test_get_matching_first_rule(
+def test_get_matching_rules(
     input_rules: list[Rule],
     lhs_op_to_match: IOperation,
     expected_num_matching_rules: int,

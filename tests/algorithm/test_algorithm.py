@@ -2,9 +2,11 @@ import pytest
 
 from gsdl.algorithm import Algorithm
 from gsdl.condition import GreaterThan, EqualTo
+from gsdl.generator import IntGenerator
 from gsdl.operation import IOperation
 from gsdl.parameter import IntParam
 from gsdl.rule import RuleSet, Rule
+from gsdl.set_builder import SetBuilder
 from tests.operation.mocks import (
     MockNonTerminalA,
     MockTerminal,
@@ -104,6 +106,43 @@ def test_to_algorithm(operation: IOperation, rule_set: RuleSet, expected: str):
                 ]
             ),
             1,
+        ),
+        (
+            MockRepeat(4),
+            RuleSet(
+                [
+                    Rule(
+                        MockRepeat(IntParam("m")),
+                        MockRepeat(IntParam("m") - 1) + MockRepeat(1),
+                        condition=GreaterThan(IntParam("m"), 1),
+                    ),
+                    Rule(
+                        MockRepeat(IntParam("m")),
+                        MockRepeat(IntParam("l")) + MockRepeat(IntParam("k")),
+                        condition=GreaterThan(IntParam("m"), 1),
+                        parameter_set=SetBuilder(
+                            (IntParam("l"), IntParam("k")),
+                            (
+                                (
+                                    IntParam("l"),
+                                    IntGenerator(0, (IntParam("m")), 1),
+                                ),
+                                (
+                                    IntParam("k"),
+                                    IntGenerator(0, (IntParam("m")), 1),
+                                ),
+                            ),
+                            IntParam("l") + IntParam("k") == IntParam("m"),
+                        ),
+                    ),
+                    Rule(
+                        MockRepeat(IntParam("m"), is_base_case=True),
+                        MockTerminal(),
+                        condition=EqualTo(IntParam("m"), 1),
+                    ),
+                ]
+            ),
+            22,
         ),
     ],
 )

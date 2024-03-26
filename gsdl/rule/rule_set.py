@@ -4,6 +4,7 @@ from copy import deepcopy
 from gsdl.operation import IOperation
 from gsdl.parameter import IParam
 from gsdl.rule import IRule
+from gsdl.set_builder import SetBuilder
 
 
 class RuleSet:
@@ -33,7 +34,16 @@ class RuleSet:
 
             rule_copy = self.__rule_with_operation_values(rule, operation)
             if self.__operation_matches_rule(operation, rule_copy):
-                result.append(rule_copy)
+                rule_param_set = rule_copy.get_parameter_set()
+                if rule_param_set:
+                    values_set = rule_param_set.generate_set()
+                    for value_set in values_set:
+                        value_set_dict = SetBuilder.to_dict(value_set)
+                        rule_copy_copy = deepcopy(rule_copy)
+                        rule_copy_copy.set_param_values(value_set_dict)
+                        result.append(rule_copy_copy)
+                else:
+                    result.append(rule_copy)
         return result
 
     def __rule_with_operation_values(self, rule: IRule, operation: IOperation) -> IRule:
