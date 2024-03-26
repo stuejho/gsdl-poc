@@ -76,7 +76,7 @@ class IntParam(AbstractParam):
         return cp
 
     def get_params(self) -> list[Self]:
-        result = list(self.params)
+        result = super().get_params()
         for op, param in self.math_operations:
             if isinstance(param, IntParam):
                 result.append(param)
