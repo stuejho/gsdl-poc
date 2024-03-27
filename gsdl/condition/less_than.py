@@ -2,12 +2,12 @@ from gsdl.condition import AbstractCondition
 from gsdl.parameter import IParam
 
 
-class GreaterThan(AbstractCondition):
+class LessThan(AbstractCondition):
     lhs: IParam | int
     rhs: IParam | int
 
     def __init__(self, lhs: IParam | int, rhs: IParam | int):
-        super().__init__([lhs, rhs], lambda a, b: a > b)
+        super().__init__([lhs, rhs], lambda a, b: a < b)
 
         self.lhs = lhs
         self.rhs = rhs

@@ -4,6 +4,7 @@ from abc import ABC, abstractmethod
 
 from gsdl.condition import ICondition
 from gsdl.operation import IOperation
+from gsdl.set_builder import ISetBuilder
 
 
 class IRule(ABC):
@@ -21,6 +22,10 @@ class IRule(ABC):
 
     @abstractmethod
     def set_param_values(self, param_values: dict) -> None:
+        raise NotImplementedError
+
+    @abstractmethod
+    def get_parameter_set(self) -> ISetBuilder:
         raise NotImplementedError
 
     @abstractmethod

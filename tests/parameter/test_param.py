@@ -1,5 +1,6 @@
 import pytest
 
+from gsdl.condition import LessThan, GreaterThan, EqualTo
 from gsdl.parameter import Param
 
 
@@ -42,3 +43,45 @@ def test_get_value_after_set_value_returns_value(
 def test_str_returns_string(param: Param, set_value: any, expected_value: str) -> None:
     param.set_value(set_value)
     assert str(param) == expected_value
+
+
+def test_add_raises_not_implemented_error() -> None:
+    a = Param("a")
+    b = Param("b")
+    with pytest.raises(NotImplementedError):
+        _ = a + b
+
+
+def test_sub_returns_not_implemented_error() -> None:
+    a = Param("a")
+    b = Param("b")
+    with pytest.raises(NotImplementedError):
+        _ = a - b
+
+
+def test_mul_returns_not_implemented_error() -> None:
+    a = Param("a")
+    b = Param("b")
+    with pytest.raises(NotImplementedError):
+        _ = a * b
+
+
+def test_lt_returns_less_than() -> None:
+    a = Param("a")
+    b = Param("b")
+    result = a < b
+    assert isinstance(result, LessThan)
+
+
+def test_gt_returns_less_than() -> None:
+    a = Param("a")
+    b = Param("b")
+    result = a > b
+    assert isinstance(result, GreaterThan)
+
+
+def test_eq_returns_less_than() -> None:
+    a = Param("a")
+    b = Param("b")
+    result = a == b
+    assert isinstance(result, EqualTo)

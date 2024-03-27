@@ -47,3 +47,16 @@ class IOperation(IImplementation, ABC):
     @abstractmethod
     def single_op_str(self) -> str:
         raise NotImplementedError
+
+    @abstractmethod
+    def copy(self) -> IOperation:
+        raise NotImplementedError
+
+    # TODO: Expansion process should be tracked separately
+    @abstractmethod
+    def get_parent_expansion(self) -> IOperation | None:
+        raise NotImplementedError
+
+    @abstractmethod
+    def set_parent_expansion(self, parent: IOperation) -> None:
+        raise NotImplementedError

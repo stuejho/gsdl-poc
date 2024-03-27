@@ -16,6 +16,8 @@ class AbstractOperation(IOperation, ABC):
     _parent_op: AbstractOperation | None
     _parent_op_idx: int | None
 
+    parent_expansion: IOperation | None
+
     def __init__(
         self,
         params: list[IParam] = None,
@@ -36,6 +38,8 @@ class AbstractOperation(IOperation, ABC):
         self._is_base_case = is_base_case
         self._parent_op = None
         self._parent_op_idx = None
+
+        self.parent_expansion = None
 
     def __add__(self, other: AbstractOperation):
         a = deepcopy(self)
@@ -129,3 +133,23 @@ class AbstractOperation(IOperation, ABC):
 
     def to_code(self) -> str:
         raise Exception("This operation cannot be converted to code")
+
+    def copy(self) -> IOperation:
+        return deepcopy(self)
+
+    def get_parent_expansion(self) -> IOperation | None:
+        return self.parent_expansion
+
+    def set_parent_expansion(self, parent: IOperation) -> None:
+        self.parent_expansion = parent
+
+    def print_cool_stuff(self) -> None:
+        expansions = []
+
+        parent = self.parent_expansion
+        while parent is not None:
+            expansions.append(parent)
+            parent = parent.get_parent_expansion()
+
+        for ex in reversed(expansions):
+            print(ex)
