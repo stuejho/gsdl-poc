@@ -43,6 +43,7 @@ class Algorithm:
                 curr_op_copy = expansion_copy.get_first_non_terminal()
 
                 curr_op_copy.expand_operation(rule.get_rhs())
+                expansion_copy.set_parent_expansion(curr_expansion)
                 if expansion_copy.is_implementation():
                     print("Final expansion:\t", expansion_copy)
                     result.append(expansion_copy)
