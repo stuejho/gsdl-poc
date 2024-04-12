@@ -131,7 +131,7 @@ class AbstractOperation(IOperation, ABC):
             idx = self._parent_op_idx
             self._parent_op._inputs[idx] = expanded_op
 
-    def to_code(self) -> str:
+    def to_code(self, *args, **kwargs) -> str:
         raise Exception("This operation cannot be converted to code")
 
     def copy(self) -> IOperation:
