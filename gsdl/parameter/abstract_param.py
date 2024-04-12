@@ -64,3 +64,6 @@ class AbstractParam(IParam, ABC):
         from gsdl.condition import EqualTo
 
         return EqualTo(self, other)
+
+    def __mod__(self, other: any) -> IParam:
+        raise NotImplementedError

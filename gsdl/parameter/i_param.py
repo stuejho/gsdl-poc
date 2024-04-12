@@ -52,3 +52,7 @@ class IParam(ABC):
     @abstractmethod
     def __eq__(self, other: any) -> ICondition:
         raise NotImplementedError
+
+    @abstractmethod
+    def __mod__(self, other: any) -> IParam:
+        raise NotImplementedError

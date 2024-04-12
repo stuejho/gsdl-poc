@@ -28,6 +28,12 @@ class IntParam(AbstractParam):
         cp.params.append(other)
         return cp
 
+    def __mod__(self, other: IntParam | int) -> IntParam:
+        cp = deepcopy(self)
+        cp.math_operations.append((Operator.MODULUS, other))
+        cp.params.append(other)
+        return cp
+
     def __int__(self):
         if self.value is None:
             raise RuntimeError("Value has not been set")
@@ -44,6 +50,8 @@ class IntParam(AbstractParam):
                 return self.value - int(other)
             case operator.MULTIPLY:
                 return self.value * int(other)
+            case operator.MODULUS:
+                return self.value % int(other)
             case _:  # pragma: no cover
                 raise NotImplementedError(f"Operator {operator} not implemented")
 
