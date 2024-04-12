@@ -11,13 +11,13 @@ from gsdl.rule import Rule, RuleSet
         (4, 4, 2)
     ]
 )
-def test_mat_vec_rules(num_rows, num_cols, expected_num_expansions):
+def test_mat_vec_unblocked_rules(num_rows, num_cols, expected_num_expansions):
     m = IntParam("m")
     n = IntParam("n")
 
     rules = [
-        Rule(MatVec(m, n), MatVecUnblockedRow(m, n)),
-        Rule(MatVec(m, n), MatVecUnblockedCol(m, n)),
+        Rule(MatVec(m, n), MatVecUnblockedRow(0, m, 0, n)),
+        Rule(MatVec(m, n), MatVecUnblockedCol(0, m, 0, n)),
     ]
     rule_set = RuleSet(rules)
 
