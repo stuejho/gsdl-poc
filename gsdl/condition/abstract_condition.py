@@ -27,3 +27,13 @@ class AbstractCondition(ICondition, ABC):
             else:
                 values.append(p)
         return self.condition(*values)
+
+    def __and__(self, other: any):
+        from gsdl.condition import And
+
+        return And(self, other)
+
+    def __or__(self, other: any):
+        from gsdl.condition import Or
+
+        return Or(self, other)
