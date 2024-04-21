@@ -1,16 +1,24 @@
 from gsdl.condition import ICondition
 from gsdl.operation import IOperation
 from gsdl.parameter import IParam
+from gsdl.set_builder import ISetBuilder
 from gsdl.rule import IRule
 
 
 class Rule(IRule):
     _params: list[IParam] = []
 
-    def __init__(self, lhs: IOperation, rhs: IOperation, condition: ICondition = None):
+    def __init__(
+        self,
+        lhs: IOperation,
+        rhs: IOperation,
+        condition: ICondition = None,
+        parameter_set: ISetBuilder = None,
+    ):
         self.lhs = lhs
         self.rhs = rhs
         self.condition = condition
+        self.parameter_set = parameter_set
 
         self.__post_init__()
 
@@ -29,6 +37,9 @@ class Rule(IRule):
 
         if self.condition is not None:
             self.__add_params(self.condition.get_params())
+
+        if self.parameter_set is not None:
+            self.__add_params(self.parameter_set.get_params())
 
     def __add_params(self, params: list[IParam]):
         for param in params:
@@ -51,6 +62,9 @@ class Rule(IRule):
             if param_value is not None:
                 param.set_value(param_value)
         return list(self._params)
+
+    def get_parameter_set(self) -> ISetBuilder:
+        return self.parameter_set
 
     def can_evaluate(self, param_values: dict) -> bool:
         for param in self._params:

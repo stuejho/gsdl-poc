@@ -3,7 +3,8 @@ from __future__ import annotations
 from copy import deepcopy
 from typing import Self
 
-from gsdl.parameter import AbstractParam, Operator
+from gsdl.parameter import AbstractParam
+from gsdl.parameter import Operator
 
 
 class IntParam(AbstractParam):
@@ -12,20 +13,26 @@ class IntParam(AbstractParam):
     def __add__(self, other: IntParam | int) -> IntParam:
         cp = deepcopy(self)
         cp.math_operations.append((Operator.ADD, other))
+        cp.params.append(other)
         return cp
 
     def __sub__(self, other: IntParam | int) -> IntParam:
         cp = deepcopy(self)
         cp.math_operations.append((Operator.SUBTRACT, other))
+        cp.params.append(other)
         return cp
 
     def __mul__(self, other: IntParam | int) -> IntParam:
         cp = deepcopy(self)
         cp.math_operations.append((Operator.MULTIPLY, other))
+        cp.params.append(other)
         return cp
 
-    def __gt__(self, other: IntParam | int) -> bool:
-        return int(self) > int(other)
+    def __mod__(self, other: IntParam | int) -> IntParam:
+        cp = deepcopy(self)
+        cp.math_operations.append((Operator.MODULUS, other))
+        cp.params.append(other)
+        return cp
 
     def __int__(self):
         if self.value is None:
@@ -35,17 +42,16 @@ class IntParam(AbstractParam):
             result = self.__apply(operator, other)
         return result
 
-    def __eq__(self, other):
-        return int(self) == int(other)
-
     def __apply(self, operator: Operator, other: IntParam | int):
         match operator:
             case operator.ADD:
-                return self.value + other
+                return self.value + int(other)
             case operator.SUBTRACT:
-                return self.value - other
+                return self.value - int(other)
             case operator.MULTIPLY:
-                return self.value * other
+                return self.value * int(other)
+            case operator.MODULUS:
+                return self.value % int(other)
             case _:  # pragma: no cover
                 raise NotImplementedError(f"Operator {operator} not implemented")
 
@@ -76,3 +82,11 @@ class IntParam(AbstractParam):
         cp = deepcopy(self)
         cp.name = name
         return cp
+
+    def get_params(self) -> list[Self]:
+        result = super().get_params()
+        for op, param in self.math_operations:
+            if isinstance(param, IntParam):
+                result.append(param)
+
+        return result

@@ -37,7 +37,7 @@ def test_is_match_lhs_greater_than_rhs_evaluates_true() -> None:
 
     gt = GreaterThan(a, b)
 
-    assert gt.is_match() is True
+    assert gt.evaluate() is True
 
 
 def test_is_match_lhs_not_greater_than_rhs_evaluates_false() -> None:
@@ -49,4 +49,4 @@ def test_is_match_lhs_not_greater_than_rhs_evaluates_false() -> None:
 
     gt = GreaterThan(a, b)
 
-    assert gt.is_match() is False
+    assert gt.evaluate() is False

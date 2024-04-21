@@ -5,3 +5,4 @@ class Operator(StrEnum):
     ADD = "+"
     SUBTRACT = "-"
     MULTIPLY = "*"
+    MODULUS = "%"

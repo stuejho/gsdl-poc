@@ -1,9 +1,11 @@
 import pytest
 
 from gsdl.condition import GreaterThan, EqualTo
+from gsdl.generator import IntGenerator
 from gsdl.operation import IOperation
 from gsdl.parameter import IntParam
 from gsdl.rule import RuleSet, Rule
+from gsdl.set_builder import SetBuilder
 from tests.operation.mocks import MockRepeat, MockTerminal, MockTwoParamNonTerminal
 
 
@@ -39,6 +41,7 @@ def test_rules_returns_copy() -> None:
                 Rule(
                     MockRepeat(1, is_base_case=True),
                     MockTerminal(),
+                    condition=EqualTo(IntParam("m"), 1),
                 ),
             ],
             MockRepeat(3),
@@ -46,10 +49,84 @@ def test_rules_returns_copy() -> None:
         ),
     ],
 )
-def test_get_matching_rule(
+def test_get_matching_first_rule(
     input_rules: list[Rule], lhs_op_to_match: IOperation, expected_rule_str: str
 ) -> None:
     rule_set = RuleSet(input_rules)
-    matching_rule = rule_set.get_matching_rule(lhs_op_to_match)
+    matching_rule = rule_set.get_first_matching_rule(lhs_op_to_match)
 
     assert str(matching_rule) == expected_rule_str
+
+
+@pytest.mark.parametrize(
+    "input_rules,lhs_op_to_match,expected_num_matching_rules",
+    [
+        (
+            [
+                Rule(
+                    MockRepeat(IntParam("m")),
+                    MockRepeat(IntParam("m") - 1) + MockRepeat(1),
+                    condition=GreaterThan(IntParam("m"), 1),
+                ),
+                Rule(
+                    MockRepeat(1, is_base_case=True),
+                    MockTerminal(),
+                    condition=EqualTo(IntParam("m"), 1),
+                ),
+            ],
+            MockRepeat(3),
+            1,
+        ),
+        (
+            [
+                Rule(
+                    MockRepeat(IntParam("m")),
+                    MockRepeat(50) + MockRepeat(50),
+                    condition=EqualTo(IntParam("m"), 100),
+                ),
+                Rule(
+                    MockRepeat(IntParam("m")),
+                    MockRepeat(IntParam("m") - 1) + MockRepeat(1),
+                    condition=GreaterThan(IntParam("m"), 1),
+                ),
+                Rule(
+                    MockRepeat(IntParam("m")),
+                    MockRepeat(IntParam("l")) + MockRepeat(IntParam("k")),
+                    condition=GreaterThan(IntParam("m"), 1),
+                    parameter_set=SetBuilder(
+                        (IntParam("l"), IntParam("k")),
+                        (
+                            (
+                                IntParam("l"),
+                                IntGenerator(0, (IntParam("m").set_value(3)), 1),
+                            ),
+                            (
+                                IntParam("k"),
+                                IntGenerator(0, (IntParam("m").set_value(3)), 1),
+                            ),
+                        ),
+                        IntParam("l") + IntParam("k") == IntParam("m").set_value(3),
+                    ),
+                ),
+                Rule(
+                    MockRepeat(1, is_base_case=True),
+                    MockTerminal(),
+                    condition=EqualTo(IntParam("m"), 1),
+                ),
+            ],
+            MockRepeat(3),
+            # m > 1, and (m - 1) + 1
+            # m > 1, and (l + k) variants
+            3,
+        ),
+    ],
+)
+def test_get_matching_rules(
+    input_rules: list[Rule],
+    lhs_op_to_match: IOperation,
+    expected_num_matching_rules: int,
+) -> None:
+    rule_set = RuleSet(input_rules)
+    matching_rules = rule_set.get_matching_rules(lhs_op_to_match)
+
+    assert len(matching_rules) == expected_num_matching_rules

@@ -6,6 +6,7 @@ from gsdl.condition import ICondition
 from gsdl.operation import IOperation
 from gsdl.parameter import IntParam, Param
 from gsdl.rule import Rule
+from gsdl.set_builder import ISetBuilder
 
 
 @pytest.fixture
@@ -42,6 +43,14 @@ def condition() -> ICondition:
     mock = Mock(ICondition())
     mock.get_params = Mock(return_value=[])
     mock.__str__ = Mock(return_value="condition")
+    return mock
+
+
+@pytest.fixture
+@patch.multiple(ISetBuilder, __abstractmethods__=set())
+def set_builder() -> ISetBuilder:
+    mock = Mock(ISetBuilder())
+    mock.generate_set = Mock(return_value=[])
     return mock
 
 

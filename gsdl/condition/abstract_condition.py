@@ -11,7 +11,29 @@ class AbstractCondition(ICondition, ABC):
         self.condition = condition
 
     def get_params(self) -> list[IParam]:
-        return list(self.params)
+        params = []
 
-    def is_match(self):
-        return self.condition(*self.params)
+        for p in self.params:
+            if isinstance(p, IParam):
+                for inner_p in p.get_params():
+                    params.append(inner_p)
+        return params
+
+    def evaluate(self):
+        values = []
+        for p in self.params:
+            if isinstance(p, IParam):
+                values.append(p.get_value())
+            else:
+                values.append(p)
+        return self.condition(*values)
+
+    def __and__(self, other: any):
+        from gsdl.condition import And
+
+        return And(self, other)
+
+    def __or__(self, other: any):
+        from gsdl.condition import Or
+
+        return Or(self, other)
