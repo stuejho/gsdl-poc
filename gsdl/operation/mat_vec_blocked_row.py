@@ -8,6 +8,8 @@ class MatVecBlockedRow(AbstractOperation):
     CONST_ROWS_NAME = "const_rows"
     CONST_COLS_NAME = "const_cols"
 
+    CTR = 0
+
     def __init__(
         self,
         num_rows_block: IntParam | int,
@@ -28,11 +30,14 @@ class MatVecBlockedRow(AbstractOperation):
         num_rows_block = self._params[0].get_value()
         num_cols_block = self._params[1].get_value()
         mat_vec = self._inputs[0]
+        ii = f"ii_{MatVecBlockedRow.CTR}"
+        jj = f"jj_{MatVecBlockedRow.CTR}"
+        MatVecBlockedRow.CTR += 1
         code = f"""
-for (int ii = {ii_start}; ii < {num_rows_block}; ii++) {{
-    for (int jj = {jj_start}; jj < {num_cols_block}; jj++) {{
+for (int {ii} = {ii_start}; {ii} < {num_rows_block}; {ii}++) {{
+    for (int {jj} = {jj_start}; {jj} < {num_cols_block}; {jj}++) {{
 {textwrap.indent(
-            mat_vec.to_code('ii * ' + str(num_rows_block), 'jj * ' + str(num_cols_block)), 
+            mat_vec.to_code(ii + ' * ' + str(num_rows_block), jj + ' * ' + str(num_cols_block)), 
             "    " * 2)
 }
     }}
