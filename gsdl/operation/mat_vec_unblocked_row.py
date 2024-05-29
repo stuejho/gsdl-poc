@@ -27,9 +27,9 @@ class MatVecUnblockedRow(AbstractOperation):
         row_stop = self._params[0].get_value()
         col_stop = self._params[1].get_value()
         code = f"""
-for (int row = {row_start}; row < {row_start} + {row_stop}; row++) {{
-    for (int col = {col_start}; col < {col_start} + {col_stop}; col++) {{
-        y[row] = A[row * num_cols + col * 1] * x[col];  
+for (int i = {row_start}; i < {row_start} + {row_stop}; i++) {{
+    for (int j = {col_start}; j < {col_start} + {col_stop}; j++) {{
+        y[i] += A[i * N + j * 1] * x[j]; 
     }}
 }}
 """

@@ -8,6 +8,7 @@ from gsdl.operation import (
     MatVecUnblockedRow,
     MatVecUnblockedCol,
     MatVecBlockedRow,
+    MatVecBlockedCol,
 )
 from gsdl.parameter import IntParam
 from gsdl.rule import Rule, RuleSet
@@ -48,10 +49,10 @@ def test_mat_vec_blocked_rules(num_rows, num_cols, expected_num_expansions):
         Rule(MatVec(m, n), MatVecUnblockedCol(m, n)),
         Rule(
             MatVec(m, n),
-            MatVecBlockedRow(mb, nb, MatVec(mb, nb)),
-            condition=((m > 1) & (n > 1)),
+            MatVecBlockedRow(m, n, mb, MatVec(mb, n)),
+            condition=(m > 1),
             parameter_set=SetBuilder(
-                (mb, nb),
+                (mb,),
                 (
                     (
                         mb,
@@ -62,7 +63,22 @@ def test_mat_vec_blocked_rules(num_rows, num_cols, expected_num_expansions):
                         IntGenerator(1, n, 1),
                     ),
                 ),
-                (m % mb == 0) & (n % nb == 0),
+                (m % mb == 0),
+            ),
+        ),
+        Rule(
+            MatVec(m, n),
+            MatVecBlockedCol(m, n, nb, MatVec(m, nb)),
+            condition=((n > 1)),
+            parameter_set=SetBuilder(
+                (nb,),
+                (
+                    (
+                        nb,
+                        IntGenerator(1, n, 1),
+                    ),
+                ),
+                (n % nb == 0),
             ),
         ),
     ]

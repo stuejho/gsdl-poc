@@ -1,0 +1,6 @@
+#include "benchmark.h"
+#include "constants.h"
+
+void benchmark(float *A, float *x, float *y) {
+{{ benchmark_code }}
+}

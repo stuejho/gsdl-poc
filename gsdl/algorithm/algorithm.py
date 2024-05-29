@@ -13,17 +13,17 @@ class Algorithm:
         curr_expansion = Wrap(self.operation)
 
         while not curr_expansion.is_implementation():
-            print("Current expansion:\t", curr_expansion)
+            # print("Current expansion:\t", curr_expansion)
 
             curr_op = curr_expansion.get_first_non_terminal()
-            print("Current operation:\t", curr_op.single_op_str())
+            # print("Current operation:\t", curr_op.single_op_str())
 
             rule = self.rule_set.get_first_matching_rule(curr_op)
-            print("Apply rule:\t\t\t", rule)
+            # print("Apply rule:\t\t\t", rule)
 
             curr_op.expand_operation(rule.get_rhs())
 
-            print()
+            # print()
         return curr_expansion
 
     def all_expansions(self) -> list[IOperation]:
@@ -45,7 +45,7 @@ class Algorithm:
                 curr_op_copy.expand_operation(rule.get_rhs())
                 expansion_copy.set_parent_expansion(curr_expansion)
                 if expansion_copy.is_implementation():
-                    print("Final expansion:\t", expansion_copy)
+                    # print("Final expansion:\t", expansion_copy)
                     result.append(expansion_copy)
                 else:
                     frontier.append(expansion_copy)

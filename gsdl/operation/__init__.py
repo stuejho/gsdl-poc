@@ -12,4 +12,4 @@ from .mat_vec import MatVec
 from .mat_vec_unblocked_col import MatVecUnblockedCol
 from .mat_vec_unblocked_row import MatVecUnblockedRow
 from .mat_vec_blocked_row import MatVecBlockedRow
-#from .mat_vec_blocked_col import MatVecBlockedCol
+from .mat_vec_blocked_col import MatVecBlockedCol
