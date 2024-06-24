@@ -1,3 +1,5 @@
+import time
+
 from gsdl.algorithm import Algorithm
 from gsdl.condition import GreaterThan, EqualTo
 from gsdl.generator import IntGenerator
@@ -37,16 +39,25 @@ def main():
     ]
     rule_set = RuleSet(rules)
 
-    repeat = Repeat(5)
+    repeat = Repeat(7)
     a = Algorithm(repeat, rule_set)
 
+    start = time.time()
     expansions = a.all_expansions()
+    end = time.time()
+    print("Time using all_expansions(): " + str(end - start))
+    print(len(expansions))
 
-    for ex in expansions:
-        print("Expansion:", ex)
-        ex.print_cool_stuff()
-        print(ex.to_code())
-        print()
+    start = time.time()
+    expansions = a.all_expansions_generator()
+    end = time.time()
+    print("Time using all_expansions_generator(): " + str(end - start))
+
+    # for ex in expansions:
+    #     print("Expansion:", ex)
+    #     ex.print_cool_stuff()
+    #     print(ex.to_code())
+    #     print()
 
 
 if __name__ == "__main__":
