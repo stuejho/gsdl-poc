@@ -26,7 +26,7 @@ These tools are available in many distributions, including the following:
 - [Miniforge](https://github.com/conda-forge/miniforge) provides a minimal
   installer for Conda and Mamba.
 
-[Miniforge](https://github.com/conda-forge/miniforge) 
+[Miniforge](https://github.com/conda-forge/miniforge)
 
 #### Option 1: Create and activate an Environment with Conda
 

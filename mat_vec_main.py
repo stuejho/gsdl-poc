@@ -23,8 +23,8 @@ from gsdl.set_builder import SetBuilder
 
 
 def main():
-    num_rows = 8
-    num_cols = 8
+    num_rows = 4
+    num_cols = 4
 
     m = IntParam("m")
     n = IntParam("n")

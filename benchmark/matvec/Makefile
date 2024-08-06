@@ -18,5 +18,8 @@ build:
 	gcc $(CFLAGS_DEBUG) \
 		baseline.o benchmark.o main.o util.o -o ./main.x -lm
 
+run:
+	./main.x
+
 clean:
 	rm -f *.o *.x *~ *.s

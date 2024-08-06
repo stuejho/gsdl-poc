@@ -1,7 +1,13 @@
 from gsdl.algorithm import Algorithm
 from gsdl.condition import GreaterThan, EqualTo
 from gsdl.generator import IntGenerator
-from gsdl.operation import Repeat, Terminal, MatVec, MatVecUnblockedRow, MatVecUnblockedCol
+from gsdl.operation import (
+    Repeat,
+    Terminal,
+    MatVec,
+    MatVecUnblockedRow,
+    MatVecUnblockedCol,
+)
 from gsdl.parameter import IntParam
 from gsdl.rule import Rule, RuleSet
 from gsdl.set_builder import SetBuilder
